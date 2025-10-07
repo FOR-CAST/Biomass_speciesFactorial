@@ -141,7 +141,6 @@ doEvent.Biomass_speciesFactorial = function(sim, eventTime, eventType) {
 #   - keep event functions short and clean, modularize by calling subroutines from section below.
 
 Init <- function(sim) {
-
   if (!is.na(P(sim)$initialB)) {
     if (P(sim)$initialB <= P(sim)$minCohortBiomass) {
       stop("P(sim)$initialB must be greater than P(sim)$minCohortBiomass ",
@@ -225,7 +224,8 @@ RunExperiment <- function(speciesTableFactorial, maxBInFactorial,
   sppColors <- viridis::viridis(n = NROW(speciesTableFactorial))
   names(sppColors) <-  speciesTableFactorial$species
 
-  modulesInProject <- list.dirs(pathsOrig$modulePath, full.names = TRUE, recursive = FALSE) |> as.list()
+  modulesInProject <- list.dirs(pathsOrig$modulePath, full.names = TRUE, recursive = FALSE) |>
+    as.list()
   names(modulesInProject) <- modulesInProject
   modulesInProject <- lapply(modulesInProject, basename)
   modules <- modifyList(modules, modulesInProject)
