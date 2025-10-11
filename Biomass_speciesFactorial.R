@@ -15,7 +15,7 @@ defineModule(sim, list(
   timeunit = "year",
   citation = list("citation.bib"),
   documentation = deparse(list("README.md", "Biomass_speciesFactorial.Rmd")),
-  reqdPkgs = list("cli", "data.table", "ggplot2", "qs", "terra", "viridis",
+  reqdPkgs = list("cli", "data.table", "fs", "ggplot2", "qs", "qs2", "terra", "viridis",
                   "PredictiveEcology/LandR@development (>= 1.0.7.9025)",
                   "PredictiveEcology/Require@development (>= 1.0.1.9020)",
                   "PredictiveEcology/reproducible@development (>= 2.0.8)",
@@ -72,7 +72,7 @@ defineModule(sim, list(
                  sourceURL = NA)
   ),
   outputObjects = bindrows(
-    createsOutput("cohortDataFactorial_path", "character",
+    createsOutput("cohortDataFactorial_path", "fs_path",
                   desc = paste(
                     "Path where the `cohortDataFactorial` object is written as an `arrow` dataset.",
                     "This dataset is a large `cohortData` table (*sensu* `Biomass_core`) columns",
@@ -89,7 +89,7 @@ defineModule(sim, list(
                     "This will give the file names of all the `cohortData` files that were produced."
                   )
     ),
-    createsOutput("speciesTableFactorial_path", "character",
+    createsOutput("speciesTableFactorial_path", "fs_path",
                   desc = paste(
                     "Path where the `speciesTableFactorial` object is written as an `arrow` dataset.",
                     "A large species table (*sensu* `Biomass_core`) with all columns necessary for",
@@ -146,9 +146,11 @@ doEvent.Biomass_speciesFactorial = function(sim, eventTime, eventType) {
       cdRows <- nrow(mod$cohortDataFactorial)
       stRows <- nrow(mod$speciesTableFactorial)
 
-      ## TODO: use relative paths!
-      sim$cohortDataFactorial_path <- file.path(outputPath(sim), paste0("cohortDataFactorial_", cdRows, ".df"))
-      sim$speciesTableFactorial_path <- file.path(outputPath(sim), paste0("speciesTableFactorial_", stRows, ".df"))
+      ## TODO: use relative paths?
+      sim$cohortDataFactorial_path <- file.path(outputPath(sim), paste0("cohortDataFactorial_", cdRows, ".df")) |>
+        fs::as_fs_path()
+      sim$speciesTableFactorial_path <- file.path(outputPath(sim), paste0("speciesTableFactorial_", stRows, ".df")) |>
+        fs::as_fs_path()
 
       ## NOTE: arrow wants data.frame, not data.table (b/c of attributes etc.)
       ## TODO: how to partition the data? would need to add a grouping variable.
@@ -164,8 +166,8 @@ doEvent.Biomass_speciesFactorial = function(sim, eventTime, eventType) {
         format = fmt
       )
 
-      sim <- registerOutputs(sim$cohortDataFactorial_path, sim)
-      sim <- registerOutputs(sim$speciesTableFactorial_path, sim)
+      sim <- registerOutputs(sim$cohortDataFactorial_path)
+      sim <- registerOutputs(sim$speciesTableFactorial_path)
 
       ## cleanup + get rid of the arrow dataset pointers so Cache() can be used on the simList
       mod$cohortDataFactorial <- NULL
@@ -366,7 +368,7 @@ RunExperiment <- function(speciesTableFactorial, maxBInFactorial,
 
 ReadExperimentFiles <- function(factorialOutputs) {
   factorialOutputs <- as.data.table(factorialOutputs)[objectName == "cohortData"]
-  fEs <- .fileExtensions() # |> rbind(c("qs2", "qs_read", "qs2")) |> unique()
+  fEs <- .fileExtensions()
   cdsList <- by(factorialOutputs, factorialOutputs[, "saveTime"], function(x) {
     fE <- reproducible:::fileExt(x$file)
     wh <- fEs[fEs$exts %in% fE,]
