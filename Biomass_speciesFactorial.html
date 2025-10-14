@@ -2972,8 +2972,8 @@ border-radius: 0px;
 
 
 <h1 class="title toc-ignore">Biomass_speciesFactorial Manual</h1>
-<h3 class="subtitle">v.0.0.13</h3>
-<h4 class="date">Last updated: 2025-10-02</h4>
+<h3 class="subtitle">v.1.0.0</h3>
+<h4 class="date">Last updated: 2025-10-14</h4>
 
 </div>
 
@@ -2986,7 +2986,7 @@ border-radius: 0px;
 <!-- if knitting to pdf remember to add the pandoc_args: ["--extract-media", "."] option to yml in order to get the badge images -->
 <div id="authors" class="section level4">
 <h4>Authors:</h4>
-<p>Eliot McIntire <a href="mailto:eliot.mcintire@nrcan-rncan.gc.ca" class="email">eliot.mcintire@nrcan-rncan.gc.ca</a> [aut]
+<p>Eliot McIntire <a href="mailto:eliot.mcintire@nrcan-rncan.gc.ca" class="email">eliot.mcintire@nrcan-rncan.gc.ca</a> [aut], Alex M. Chubaty <a href="mailto:achubaty@for-cast.ca" class="email">achubaty@for-cast.ca</a> [ctb]
 <!-- ideally separate authors with new lines, '\n' not working --></p>
 </div>
 <div id="module-overview" class="section level2">
@@ -3080,7 +3080,7 @@ NA
 NA
 </td>
 <td style="text-align:left;">
-Used by Plots function, which can be optionally used here
+Used by <code>Plots()</code> to output plots to ‘screen’, ‘png’, etc.
 </td>
 </tr>
 <tr>
@@ -3239,7 +3239,7 @@ numeric
 NA
 </td>
 <td style="text-align:left;">
-initial cohort biomass at <code>age = 1</code>. If <code>NA</code>, will use <code>maxBInFactorial/30</code> akin to the LANDIS-II Biomass Succession default. Must be greater than <code>P(sim)$minCohortBiomass</code>
+initial cohort biomass at <code>age = 1</code>. If <code>NA</code>, will use <code>maxBInFactorial / 30</code> akin to the LANDIS-II Biomass Succession default. Must be greater than <code>P(sim)$minCohortBiomass</code>
 </td>
 </tr>
 <tr>
@@ -3363,13 +3363,13 @@ desc
 <tbody>
 <tr>
 <td style="text-align:left;">
-cohortDataFactorial
+cohortDataFactorial_path
 </td>
 <td style="text-align:left;">
-data.table
+fs_path
 </td>
 <td style="text-align:left;">
-A large <code>cohortData</code> table ( sensu <code>Biomass_core</code>) columns necessary for running <code>Biomass_core</code>, e.g., <code>longevity</code>, <code>growthcurve</code>, <code>mortalityshape</code>, etc.. It will have unique species for unique combination of the <code>argsForFactorial</code>, and a fixed value for all other species traits. Currently, these are set to defaults internally.
+Path where the <code>cohortDataFactorial</code> object is written as an <code>arrow</code> dataset. This dataset is a large <code>cohortData</code> table ( sensu <code>Biomass_core</code>) columns necessary for running <code>Biomass_core</code> (e.g., <code>longevity</code>, <code>growthcurve</code>, <code>mortalityshape</code>, etc.). It will have unique species for unique combination of the <code>argsForFactorial</code>, and a fixed value for all other species traits. Currently, these are set to defaults internally.
 </td>
 </tr>
 <tr>
@@ -3385,13 +3385,13 @@ A data.table of the <code>outputs(sim)</code> that is used during the factorial.
 </tr>
 <tr>
 <td style="text-align:left;">
-speciesTableFactorial
+speciesTableFactorial_path
 </td>
 <td style="text-align:left;">
-data.table
+fs_path
 </td>
 <td style="text-align:left;">
-A large species table ( sensu <code>Biomass_core</code>) with all columns necessary for running <code>Biomass_core</code>, e.g., <code>longevity</code>, <code>growthcurve</code>, <code>mortalityshape</code>, etc.. It will have unique species for unique combination of the <code>argsForFactorial</code>, and a fixed value for all other species traits. Currently, these are set to defaults internally.
+Path where the <code>speciesTableFactorial</code> object is written as an <code>arrow</code> dataset. A large species table ( sensu <code>Biomass_core</code>) with all columns necessary for running <code>Biomass_core</code>, e.g., <code>longevity</code>, <code>growthcurve</code>, <code>mortalityshape</code>, etc.. It will have unique species for unique combination of the <code>argsForFactorial</code>, and a fixed value for all other species traits. Currently, these are set to defaults internally.
 </td>
 </tr>
 </tbody>
