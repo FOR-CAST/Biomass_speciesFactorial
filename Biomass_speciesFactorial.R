@@ -227,7 +227,7 @@ Init <- function(sim) {
 factorialOutputs <- function(times, paths) {
   outputs <- expand.grid(
     objectName = "cohortData",
-    saveTime = unique(seq(0, 100, by = 10)),
+    saveTime = unique(seq(times$start, times$end, by = 10)),
     eventPriority = 1,
     fun = "qs::qsave",
     # fun = "qs2::qs_save",
