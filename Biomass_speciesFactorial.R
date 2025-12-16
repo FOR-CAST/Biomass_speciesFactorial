@@ -312,7 +312,8 @@ RunExperiment <- function(speciesTableFactorial, maxBInFactorial,
       sppEquivCol = "B_factorial",
       successionTimestep = 10,
       vegLeadingProportion = 0,
-      minCohortBiomass = minCohortB
+      minCohortBiomass = minCohortB, 
+      initialB = initialB
     )
   )
 
