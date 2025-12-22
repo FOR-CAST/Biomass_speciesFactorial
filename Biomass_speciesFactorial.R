@@ -202,7 +202,8 @@ Init <- function(sim) {
   mod$times <- list(start = 0, end = endTime)
 
   message("Setting up factorial combinations of species traits, and associated initial cohortData table")
-  mod$dig <- CacheDigest(sim$argsForFactorial)$outputHash
+  mod$dig <- CacheDigest(c(sim$argsForFactorial, P(sim)$initialB,
+                           P(sim$minCohortBiomass, P(sim)$maxBInFactorial)))$outputHash
   mod$pathsOrig <- paths(sim) ## TODO: confirm this
   on.exit({
     suppressMessages(do.call(setPaths, mod$pathsOrig))
