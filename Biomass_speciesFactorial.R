@@ -226,8 +226,7 @@ factorialOutputs <- function(times, paths) {
     objectName = "cohortData",
     saveTime = unique(seq(times$start, times$end, by = 10)),
     eventPriority = 1,
-    fun = "qs::qsave",
-    # fun = "qs2::qs_save",
+    fun = "qs2::qs_save",
     stringsAsFactors = FALSE
   ) |>
     data.frame()
