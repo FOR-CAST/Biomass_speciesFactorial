@@ -166,12 +166,8 @@ doEvent.Biomass_speciesFactorial = function(sim, eventTime, eventType) {
         format = fmt
       )
 
-      ## TODO: registerOutputs is broken:
-      ## Error in rbindlist(list(outputs, outs), use.names = TRUE, fill = TRUE) :
-      ##   Class attribute on column 1 of item 2 does not match with column 5 of item 1.
-      ##   You can deactivate this safety-check by using ignore.attr=TRUE
-      # sim <- registerOutputs(sim$cohortDataFactorial_path)
-      # sim <- registerOutputs(sim$speciesTableFactorial_path)
+      sim <- registerOutputs(sim$cohortDataFactorial_path, sim)
+      sim <- registerOutputs(sim$speciesTableFactorial_path, sim)
 
       ## cleanup + get rid of the arrow dataset pointers so Cache() can be used on the simList
       mod$cohortDataFactorial <- NULL
@@ -257,7 +253,7 @@ RunExperiment <- function(speciesTableFactorial, maxBInFactorial,
     Cache(.cacheExtra = knownDigest, omitArgs = c("speciesTable"))
 
   if (is.na(initialB)) {
-    initialB <- as.integer(round(maxBInFactorial/30)) #LANDIS-II BSM default
+    initialB <- as.integer(round(maxBInFactorial / 30)) #LANDIS-II BSM default
   }
 
   cohortData <- factorialCohortData(speciesTableFactorial, speciesEcoregion, initialB = initialB) |>
@@ -282,7 +278,7 @@ RunExperiment <- function(speciesTableFactorial, maxBInFactorial,
 
   ## Make sppColors
   sppColors <- viridis::viridis(n = NROW(speciesTableFactorial))
-  names(sppColors) <-  speciesTableFactorial$species
+  names(sppColors) <- speciesTableFactorial$species
 
   modulesInProject <- list.dirs(pathsOrig$modulePath, full.names = TRUE, recursive = FALSE) |>
     as.list()
@@ -313,7 +309,7 @@ RunExperiment <- function(speciesTableFactorial, maxBInFactorial,
       sppEquivCol = "B_factorial",
       successionTimestep = 10,
       vegLeadingProportion = 0,
-      minCohortBiomass = minCohortB, 
+      minCohortBiomass = minCohortB,
       initialB = initialB
     )
   )
@@ -363,10 +359,11 @@ RunExperiment <- function(speciesTableFactorial, maxBInFactorial,
     outputs = factorialOutputs,
     debug = 1,
     outputObjects = "pixelGroupMap"
-  ) |> Cache(
-    .cacheExtra = list(knownDigest, paths$outputPath),
-    omitArgs = c("objects", "params", "debug", "paths")
-  )
+  ) |>
+    Cache(
+      .cacheExtra = list(knownDigest, paths$outputPath),
+      omitArgs = c("objects", "params", "debug", "paths")
+    )
 
   ## NOTE: the outputs of this function we care about are the output files written to disk
   return(invisible(NULL))
@@ -377,7 +374,7 @@ ReadExperimentFiles <- function(factorialOutputs) {
   fEs <- .fileExtensions()
   cdsList <- by(factorialOutputs, factorialOutputs[, "saveTime"], function(x) {
     fE <- reproducible:::fileExt(x$file)
-    wh <- fEs[fEs$exts %in% fE,]
+    wh <- fEs[fEs$exts %in% fE, ]
     message(cli::col_green("reading: "))
     cat(cli::col_green(x$file, "..."))
     cd <- getFromNamespace(wh$fun, ns = asNamespace(wh$package))(x$file)[, .(speciesCode, age, B, pixelGroup)]
@@ -409,8 +406,8 @@ plotFactorial <- function(sim) {
 subsampleForPlot <- function(cds, speciesTableFactorial) {
   uniq <- unique(cds$pixelGroup)
   sam <- Cache(sample, uniq, 64)
-  ff <- cds[pixelGroup %in% sam];
-  ff[, Sp := gsub(".+_", "", speciesCode)];
+  ff <- cds[pixelGroup %in% sam]
+  ff[, Sp := gsub(".+_", "", speciesCode)]
   ff[grep("^Sp", Sp, invert = TRUE), Sp := "Single"]
   ff[, maxB := max(B), by = "pixelGroup"]
   setkeyv(ff, c("pixelGroup", "Sp", "age"))
@@ -435,7 +432,7 @@ ggplotFactorial <- function(ff) {
   title <- paste0("Factorial Experiment: ", length(sam), " random plot")
   gg1 <- ggplot(ff, aes(x = age, y = B, colour = Sp)) +
     geom_line() +
-    facet_wrap(~ Title, nrow = ceiling(sqrt(length(sam))), scales = "fixed") +
+    facet_wrap(~Title, nrow = ceiling(sqrt(length(sam))), scales = "fixed") +
     ggtitle(title) +
     theme(strip.text.x = element_text(size = 5))
 
@@ -447,24 +444,30 @@ ggplotFactorial <- function(ff) {
   message(currentModule(sim), ": using dataPath '", dPath, "'.")
 
   if (!suppliedElsewhere("argsForFactorial")) {
-    sim$argsForFactorial <-
-      switch(P(sim)$factorialSize,
-             large = list(cohortsPerPixel = 1:2,
-                          growthcurve = seq(0.65, 0.85, 0.02),
-                          mortalityshape = seq(20, 25, 2),
-                          longevity = seq(125, 600, 25), # not 600 -- too big
-                          mANPPproportion = seq(3.5, 6, 0.25)),
-             medium = list(cohortsPerPixel = 1:2,
-                           growthcurve = seq(0.65, 0.85, 0.02),
-                           mortalityshape = seq(20, 25, 2),
-                           longevity = seq(125, 600, 50),
-                           mANPPproportion = seq(3.5, 6, 0.3)),
-             small = list(cohortsPerPixel = 1:2,
-                          growthcurve = seq(0.65, 0.85, 0.2),
-                          mortalityshape = seq(20, 25, 5),
-                          longevity = seq(125, 600, 100),
-                          mANPPproportion = seq(3.5, 6, 1))
+    sim$argsForFactorial <- switch(
+      P(sim)$factorialSize,
+      large = list(
+        cohortsPerPixel = 1:2,
+        growthcurve = seq(0.65, 0.85, 0.02),
+        mortalityshape = seq(20, 25, 2),
+        longevity = seq(125, 600, 25), # not 600 -- too big
+        mANPPproportion = seq(3.5, 6, 0.25)
+      ),
+      medium = list(
+        cohortsPerPixel = 1:2,
+        growthcurve = seq(0.65, 0.85, 0.02),
+        mortalityshape = seq(20, 25, 2),
+        longevity = seq(125, 600, 50),
+        mANPPproportion = seq(3.5, 6, 0.3)
+      ),
+      small = list(
+        cohortsPerPixel = 1:2,
+        growthcurve = seq(0.65, 0.85, 0.2),
+        mortalityshape = seq(20, 25, 5),
+        longevity = seq(125, 600, 100),
+        mANPPproportion = seq(3.5, 6, 1)
       )
+    )
   }
   return(invisible(sim))
 }
