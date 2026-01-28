@@ -249,7 +249,7 @@ Description of the module outputs (Table \@ref(tab:moduleOutputs-Biomass-species
 ##  - the version had many changes to accommodate the 'no regeneration' scenario;
 ## - many of the other changes have been subsequently incorporated into Biomass_core, so it may work with a newer version
 options(
-  reproducible.cacheSaveFormat = "qs",
+  reproducible.cacheSaveFormat = "qs2",
   reproducible.showSimilar = TRUE,
   reproducible.showSimilarDepth = 5,
   reproducible.useMemoise = FALSE,
@@ -284,7 +284,7 @@ modules <- c("Biomass_speciesFactorial", modules)
 outputs <- data.frame(expand.grid(
   objectName = c("species", "speciesEcoregion"),
   saveTime = 0,
-  eventPriority = 10, fun = "qs::qsave",
+  eventPriority = 10, fun = "qs2::qs_save",
   stringsAsFactors = FALSE
 ))
 
