@@ -166,11 +166,9 @@ doEvent.Biomass_speciesFactorial = function(sim, eventTime, eventType) {
         format = fmt
       )
 
-      ## TODO: still broken
-      ## Error in `rbindlist()`:
-      ##   ! Class attribute on column 1 of item 2 does not match with column 5 of item 1.
-      # sim <- registerOutputs(sim$cohortDataFactorial_path, sim)
-      # sim <- registerOutputs(sim$speciesTableFactorial_path, sim)
+      ## NOTE: needs to be character (registerOutputs chokes on fs_path class)
+      sim <- registerOutputs(as.character(sim$cohortDataFactorial_path), sim)
+      sim <- registerOutputs(as.character(sim$speciesTableFactorial_path), sim)
 
       ## cleanup + get rid of the arrow dataset pointers so Cache() can be used on the simList
       mod$cohortDataFactorial <- NULL
