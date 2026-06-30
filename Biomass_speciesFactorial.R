@@ -10,15 +10,21 @@ defineModule(sim, list(
     person(c("Alex", "M."), "Chubaty", email = "achubaty@for-cast.ca", role = "ctb")
   ),
   childModules = character(0),
-  version = list(Biomass_speciesFactorial = "1.0.2"),
+  version = list(Biomass_speciesFactorial = "1.0.3"),
   timeframe = as.POSIXlt(c(NA, NA)),
   timeunit = "year",
   citation = list("citation.bib"),
   documentation = deparse(list("README.md", "Biomass_speciesFactorial.Rmd")),
+  ## This module runtime-nests Biomass_core (via simInitAndSpades), whose code calls functions from
+  ## its own reqdPkgs UNQUALIFIED (e.g. pemisc::factorValues2, SpaDES.tools::rasterizeReduced). Under
+  ## the targets options firewall those packages are not auto-attached for the nested run, so declare
+  ## Biomass_core's reqdPkgs here too (mirrors Biomass_borealDataPrep). Keep in sync with Biomass_core.
   reqdPkgs = list("cli", "data.table", "fs", "ggplot2", "qs2", "terra", "viridis",
+                  "arrow", "assertthat", "compiler", "dplyr", "fpCompare", "grid", "parallel",
+                  "purrr", "quickPlot (>= 1.0.2.9003)", "Rcpp", "R.utils", "scales", "tidyr",
+                  "SpaDES.tools (>= 1.0.0.9001)",
+                  "ianmseddy/LandR.CS@development (>= 2.0.0.9002)",
                   "PredictiveEcology/LandR@development (>= 1.0.7.9025)",
-                  ## pemisc: this module runtime-nests Biomass_core, which calls pemisc::factorValues2
-                  ## unqualified; declare it here so it's attached for the nested run (as borealDataPrep does)
                   "PredictiveEcology/pemisc@development",
                   "PredictiveEcology/Require@development (>= 1.0.1.9020)",
                   "PredictiveEcology/reproducible@development (>= 3.0.0)",
