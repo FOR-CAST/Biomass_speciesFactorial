@@ -19,8 +19,7 @@ defineModule(sim, list(
                   "PredictiveEcology/LandR@development (>= 1.0.7.9025)",
                   "PredictiveEcology/Require@development (>= 1.0.1.9020)",
                   "PredictiveEcology/reproducible@development (>= 3.0.0)",
-                  "PredictiveEcology/SpaDES.core@development (>= 3.0.3.9000)",
-                  "PredictiveEcology/SpaDES.project@development (>= 0.0.7.9013)"),
+                  "PredictiveEcology/SpaDES.core@development (>= 3.0.3.9000)"),
   parameters = rbind(
     #defineParameter("paramName", "paramClass", value, min, max, "parameter description"),
     defineParameter(".plots", "character", "screen", NA, NA,
@@ -280,19 +279,18 @@ RunExperiment <- function(speciesTableFactorial, maxBInFactorial,
   sppColors <- viridis::viridis(n = NROW(speciesTableFactorial))
   names(sppColors) <- speciesTableFactorial$species
 
-  modulesInProject <- list.dirs(pathsOrig$modulePath, full.names = TRUE, recursive = FALSE) |>
-    as.list()
-  names(modulesInProject) <- modulesInProject
-  modulesInProject <- lapply(modulesInProject, basename)
-  modules <- modifyList(modules, modulesInProject)
-
-  if (!any("Biomass_core" %in% modules)) {
-    moduleNameAndBranch <- c("PredictiveEcology/Biomass_core@development (>= 1.3.9)")
-    modules <- Require::extractPkgName(moduleNameAndBranch)
-    getModule(moduleNameAndBranch, modulePath = paths$modulePath, overwrite = TRUE) # will only overwrite if wrong version
-  } else {
-    paths$modulePath <- pathsOrig$modulePath
-    modules <- "Biomass_core"
+  ## Use the project's PINNED Biomass_core (no runtime getModule fetch). Symlink it into
+  ## this module's `submodules` dir so the nested run gets an isolated modulePath.
+  modules <- "Biomass_core"
+  bcSrc <- file.path(pathsOrig$modulePath, "Biomass_core")
+  bcSrc <- bcSrc[dir.exists(bcSrc)]
+  if (length(bcSrc) == 0L) {
+    stop("Biomass_speciesFactorial requires a pinned 'Biomass_core' in modulePath; none found.")
+  }
+  bcDest <- file.path(paths$modulePath, "Biomass_core")
+  if (!dir.exists(bcDest)) {
+    dir.create(paths$modulePath, recursive = TRUE, showWarnings = FALSE)
+    file.symlink(normalizePath(bcSrc[[1]]), bcDest)
   }
 
   parameters <- list(
