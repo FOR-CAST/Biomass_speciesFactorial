@@ -10,22 +10,13 @@ defineModule(sim, list(
     person(c("Alex", "M."), "Chubaty", email = "achubaty@for-cast.ca", role = "ctb")
   ),
   childModules = character(0),
-  version = list(Biomass_speciesFactorial = "1.0.3"),
+  version = list(Biomass_speciesFactorial = "1.0.4"),
   timeframe = as.POSIXlt(c(NA, NA)),
   timeunit = "year",
   citation = list("citation.bib"),
   documentation = deparse(list("README.md", "Biomass_speciesFactorial.Rmd")),
-  ## This module runtime-nests Biomass_core (via simInitAndSpades), whose code calls functions from
-  ## its own reqdPkgs UNQUALIFIED (e.g. pemisc::factorValues2, SpaDES.tools::rasterizeReduced). Under
-  ## the targets options firewall those packages are not auto-attached for the nested run, so declare
-  ## Biomass_core's reqdPkgs here too (mirrors Biomass_borealDataPrep). Keep in sync with Biomass_core.
   reqdPkgs = list("cli", "data.table", "fs", "ggplot2", "qs2", "terra", "viridis",
-                  "arrow", "assertthat", "compiler", "dplyr", "fpCompare", "grid", "parallel",
-                  "purrr", "quickPlot (>= 1.0.2.9003)", "Rcpp", "R.utils", "scales", "tidyr",
-                  "SpaDES.tools (>= 1.0.0.9001)",
-                  "ianmseddy/LandR.CS@development (>= 2.0.0.9002)",
                   "PredictiveEcology/LandR@development (>= 1.0.7.9025)",
-                  "PredictiveEcology/pemisc@development",
                   "PredictiveEcology/Require@development (>= 1.0.1.9020)",
                   "PredictiveEcology/reproducible@development (>= 3.0.0)",
                   "PredictiveEcology/SpaDES.core@development (>= 3.0.3.9000)"),
@@ -348,7 +339,11 @@ RunExperiment <- function(speciesTableFactorial, maxBInFactorial,
     LandR.assertions = FALSE,
     LandR.verbose = 0,
     spades.moduleCodeChecks = FALSE,
-    spades.recoveryMode = FALSE
+    spades.recoveryMode = FALSE,
+    ## SpaDES.core flips spades.loadReqdPkgs to FALSE once the outer simInit/spades has warmed up;
+    ## re-enable it so the nested Biomass_core simInitAndSpades() below loads ITS OWN reqdPkgs
+    ## (pemisc, SpaDES.tools, ...) rather than relying on whatever this module happens to attach.
+    spades.loadReqdPkgs = TRUE
   )
 
   message("Running simulation with all combinations; cohortData objects are saved in ", paths$outputPath)
