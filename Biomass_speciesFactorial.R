@@ -288,10 +288,17 @@ RunExperiment <- function(speciesTableFactorial, maxBInFactorial,
     stop("Biomass_speciesFactorial requires a pinned 'Biomass_core' in modulePath; none found.")
   }
   bcDest <- file.path(paths$modulePath, "Biomass_core")
-  if (!dir.exists(bcDest)) {
-    dir.create(paths$modulePath, recursive = TRUE, showWarnings = FALSE)
-    file.symlink(normalizePath(bcSrc[[1]]), bcDest)
+  dir.create(paths$modulePath, recursive = TRUE, showWarnings = FALSE)
+  ## Always (re)create the symlink to the pinned Biomass_core, removing any STALE entry first so it
+  ## cannot shadow the pin -- a leftover real dir from an old getModule run, or a prior symlink. Remove
+  ## the symlink itself (never recurse into its target) or a stale real dir, then symlink fresh.
+  lnk <- Sys.readlink(bcDest)
+  if (isTRUE(nzchar(lnk))) {
+    unlink(bcDest)
+  } else if (dir.exists(bcDest)) {
+    unlink(bcDest, recursive = TRUE)
   }
+  file.symlink(normalizePath(bcSrc[[1]]), bcDest)
 
   parameters <- list(
     Biomass_core = list(
