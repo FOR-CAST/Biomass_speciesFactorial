@@ -10,13 +10,16 @@ defineModule(sim, list(
     person(c("Alex", "M."), "Chubaty", email = "achubaty@for-cast.ca", role = "ctb")
   ),
   childModules = character(0),
-  version = list(Biomass_speciesFactorial = "1.0.1"),
+  version = list(Biomass_speciesFactorial = "1.0.2"),
   timeframe = as.POSIXlt(c(NA, NA)),
   timeunit = "year",
   citation = list("citation.bib"),
   documentation = deparse(list("README.md", "Biomass_speciesFactorial.Rmd")),
   reqdPkgs = list("cli", "data.table", "fs", "ggplot2", "qs2", "terra", "viridis",
                   "PredictiveEcology/LandR@development (>= 1.0.7.9025)",
+                  ## pemisc: this module runtime-nests Biomass_core, which calls pemisc::factorValues2
+                  ## unqualified; declare it here so it's attached for the nested run (as borealDataPrep does)
+                  "PredictiveEcology/pemisc@development",
                   "PredictiveEcology/Require@development (>= 1.0.1.9020)",
                   "PredictiveEcology/reproducible@development (>= 3.0.0)",
                   "PredictiveEcology/SpaDES.core@development (>= 3.0.3.9000)"),
