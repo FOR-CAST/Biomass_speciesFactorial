@@ -1,0 +1,21 @@
+Known issues: <https://github.com/PredictiveEcology/Biomass_speciesFactorial/issues>
+
+# Biomass_speciesFactorial 1.0.1
+
+* Wire the factorial outputs through `registerOutputs()`: register the `cohortDataFactorial` and `speciesTableFactorial` dataset paths as module outputs, coercing the paths to character because `registerOutputs()` chokes on the `fs_path` class.
+* Migrate persisted-object storage from `qs` to `qs2` (drop `qs` from `reqdPkgs`; update the Rmd/md accordingly).
+* Pass `initialB` through to `Biomass_core` alongside `minCohortBiomass`, and derive factorial save times from `times$start`/`times$end` instead of a hardcoded `seq(0, 100, by = 10)`.
+* Fix Cache digest handling.
+
+# Biomass_speciesFactorial 1.0.0
+
+* Store the factorial results as on-disk `arrow` datasets: write `cohortDataFactorial` and `speciesTableFactorial` via `arrow::write_dataset()` (feather format, faster than parquet at this scale), add module parameters pointing to the dataset paths, and drop the in-memory arrow pointers before `Cache()`-ing the `simList` (PR #11).
+* Rebuild the module manual/vignette from the current template: LaTeX/formatting fixes, add `citations/` (bibliography plus Ecology Letters CSL), and fix the GitHub Actions Rmd-render workflow.
+* Merge contributed fixes (PR #8): update the SpaDES.project pointer.
+
+# Biomass_speciesFactorial 0.0.13
+
+* Add cohort-biomass parameters `initialB` and `minCohortBiomass`: default `initialB` to `round(maxBInFactorial / 30)` (LANDIS-II BSM default) when `NA`, guard against `NA` values, and validate that `initialB > minCohortBiomass`.
+* Make `Biomass_core` execution optional and decoupled: move `runExperiment`/`readExperimentFiles` into the `init` event as `Cache()`d calls, reuse an existing `Biomass_core` in the project when present (otherwise fetch it via `getModule()`), and stop forcing all modules to be run together.
+* Modernize the toolchain: switch from `SpaDES.install` to `SpaDES.project`, require `SpaDES.core (>= 2.0.2.9010)`, replace `raster` with `terra`, add `data.table` to `reqdPkgs`, qualify `getModule()` calls with the `PredictiveEcology/` prefix, and use `inputPath()` instead of `dataPath()`.
+* Metadata and housekeeping: use the `person` class for authors, pass `sppEquiv`/`sppNameVector`/`sppEquivCol` to `Biomass_core`, keep nested module code under a `submodules/` subdirectory, and update the GitHub Actions Rmd workflow.
