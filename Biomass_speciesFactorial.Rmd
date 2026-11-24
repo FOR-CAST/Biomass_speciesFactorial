@@ -74,9 +74,6 @@ knitr::kable(df_params, caption = "List of (ref:Biomass-speciesFactorial) parame
 
 ### Events
 
-<!-- TODO -->
-Describe what happens for each event type.
-
 ```{r eventFlowCheck-Biomass-speciesFactorial, include = FALSE, eval = TRUE, cache = FALSE}
 ## the generated figures need SpaDES.core 3.2.1.9068 or later; older versions skip them
 .efOK <- utils::packageVersion("SpaDES.core") >= "3.2.1.9068"
