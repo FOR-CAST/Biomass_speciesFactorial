@@ -1,7 +1,7 @@
 ---
 title: "Biomass_speciesFactorial Manual"
 subtitle: "v.1.1.0.9000"
-date: "Last updated: 2026-10-08"
+date: "Last updated: 2026-11-24"
 output:
   bookdown::html_document2:
     toc: true
@@ -77,6 +77,7 @@ Summary of user-visible parameters (Table \@ref(tab:moduleParams-Biomass-species
    <th style="text-align:left;"> min </th>
    <th style="text-align:left;"> max </th>
    <th style="text-align:left;"> paramDesc </th>
+   <th style="text-align:left;"> cacheKey </th>
   </tr>
  </thead>
 <tbody>
@@ -87,6 +88,7 @@ Summary of user-visible parameters (Table \@ref(tab:moduleParams-Biomass-species
    <td style="text-align:left;"> NA </td>
    <td style="text-align:left;"> NA </td>
    <td style="text-align:left;"> Used by `Plots()` to output plots to 'screen', 'png', etc. </td>
+   <td style="text-align:left;"> TRUE </td>
   </tr>
   <tr>
    <td style="text-align:left;"> .plotInitialTime </td>
@@ -95,6 +97,7 @@ Summary of user-visible parameters (Table \@ref(tab:moduleParams-Biomass-species
    <td style="text-align:left;"> NA </td>
    <td style="text-align:left;"> NA </td>
    <td style="text-align:left;"> Describes the simulation time at which the first plot event should occur. </td>
+   <td style="text-align:left;"> TRUE </td>
   </tr>
   <tr>
    <td style="text-align:left;"> .plotInterval </td>
@@ -103,6 +106,7 @@ Summary of user-visible parameters (Table \@ref(tab:moduleParams-Biomass-species
    <td style="text-align:left;"> NA </td>
    <td style="text-align:left;"> NA </td>
    <td style="text-align:left;"> Describes the simulation time interval between plot events. </td>
+   <td style="text-align:left;"> TRUE </td>
   </tr>
   <tr>
    <td style="text-align:left;"> .saveInitialTime </td>
@@ -111,6 +115,7 @@ Summary of user-visible parameters (Table \@ref(tab:moduleParams-Biomass-species
    <td style="text-align:left;"> NA </td>
    <td style="text-align:left;"> NA </td>
    <td style="text-align:left;"> Describes the simulation time at which the first save event should occur. </td>
+   <td style="text-align:left;"> TRUE </td>
   </tr>
   <tr>
    <td style="text-align:left;"> .saveInterval </td>
@@ -119,6 +124,7 @@ Summary of user-visible parameters (Table \@ref(tab:moduleParams-Biomass-species
    <td style="text-align:left;"> NA </td>
    <td style="text-align:left;"> NA </td>
    <td style="text-align:left;"> This describes the simulation time interval between save events. </td>
+   <td style="text-align:left;"> TRUE </td>
   </tr>
   <tr>
    <td style="text-align:left;"> .seed </td>
@@ -127,6 +133,7 @@ Summary of user-visible parameters (Table \@ref(tab:moduleParams-Biomass-species
    <td style="text-align:left;"> NA </td>
    <td style="text-align:left;"> NA </td>
    <td style="text-align:left;"> Named list of seeds to use for each event (names). </td>
+   <td style="text-align:left;"> TRUE </td>
   </tr>
   <tr>
    <td style="text-align:left;"> .useCache </td>
@@ -135,6 +142,7 @@ Summary of user-visible parameters (Table \@ref(tab:moduleParams-Biomass-species
    <td style="text-align:left;"> NA </td>
    <td style="text-align:left;"> NA </td>
    <td style="text-align:left;"> Should caching of events or module be used? </td>
+   <td style="text-align:left;"> TRUE </td>
   </tr>
   <tr>
    <td style="text-align:left;"> factorialSize </td>
@@ -143,6 +151,7 @@ Summary of user-visible parameters (Table \@ref(tab:moduleParams-Biomass-species
    <td style="text-align:left;"> small </td>
    <td style="text-align:left;"> large </td>
    <td style="text-align:left;"> If user does not supply an explicit `argsForFactorial`, then they can specify either 'small', 'medium' or 'large' to take default ones that have different numbers of factorial combinations. Smaller is faster and uses less RAM; larger is slower and uses more RAM. </td>
+   <td style="text-align:left;"> TRUE </td>
   </tr>
   <tr>
    <td style="text-align:left;"> initialB </td>
@@ -151,6 +160,7 @@ Summary of user-visible parameters (Table \@ref(tab:moduleParams-Biomass-species
    <td style="text-align:left;"> 1 </td>
    <td style="text-align:left;"> NA </td>
    <td style="text-align:left;"> initial cohort biomass at `age = 1`. If `NA`, will use `maxBInFactorial / 30` akin to the LANDIS-II Biomass Succession default. Must be greater than `P(sim)$minCohortBiomass` </td>
+   <td style="text-align:left;"> TRUE </td>
   </tr>
   <tr>
    <td style="text-align:left;"> maxBInFactorial </td>
@@ -159,6 +169,7 @@ Summary of user-visible parameters (Table \@ref(tab:moduleParams-Biomass-species
    <td style="text-align:left;"> NA </td>
    <td style="text-align:left;"> NA </td>
    <td style="text-align:left;"> The arbitrary maximum biomass for the factorial simulations. This is a per-species maximum within a pixel. </td>
+   <td style="text-align:left;"> TRUE </td>
   </tr>
   <tr>
    <td style="text-align:left;"> minCohortBiomass </td>
@@ -167,6 +178,7 @@ Summary of user-visible parameters (Table \@ref(tab:moduleParams-Biomass-species
    <td style="text-align:left;"> NA </td>
    <td style="text-align:left;"> NA </td>
    <td style="text-align:left;"> The smallest amount of biomass before a cohort is removed from a simulation. Barring removal via this parameter, cohorts can persist with B = 1 until age = longevity. </td>
+   <td style="text-align:left;"> TRUE </td>
   </tr>
   <tr>
    <td style="text-align:left;"> readExperimentFiles </td>
@@ -175,6 +187,7 @@ Summary of user-visible parameters (Table \@ref(tab:moduleParams-Biomass-species
    <td style="text-align:left;"> NA </td>
    <td style="text-align:left;"> NA </td>
    <td style="text-align:left;"> Reads all the `cohortData` files that were saved to disk during the experiment. Note that this can be run even if `runExperiment = FALSE`. </td>
+   <td style="text-align:left;"> TRUE </td>
   </tr>
   <tr>
    <td style="text-align:left;"> runExperiment </td>
@@ -183,14 +196,63 @@ Summary of user-visible parameters (Table \@ref(tab:moduleParams-Biomass-species
    <td style="text-align:left;"> NA </td>
    <td style="text-align:left;"> NA </td>
    <td style="text-align:left;"> A logical indicating whether to run the experiment (may take time). See `readExperimentFiles`, which may be useful if the `cohortData` files have already been saved and all that is needed is reading them in. </td>
+   <td style="text-align:left;"> TRUE </td>
   </tr>
 </tbody>
 </table>
 
 ### Events
 
-<!-- TODO -->
-Describe what happens for each event type.
+
+
+<div class="figure">
+<img src="figures/Biomass_speciesFactorial_eventFlow.png" alt="(ref:Biomass-speciesFactorial) events, as read from the module code with its default parameters." width="100%" />
+<p class="caption">(\#fig:eventFlow-Biomass-speciesFactorial)(ref:Biomass-speciesFactorial) events, as read from the module code with its default parameters.</p>
+</div>
+
+Table \@ref(tab:eventObjects-Biomass-speciesFactorial) lists, for each object, the code that writes it and the code that only reads it.
+
+<table class="table" style="width: auto !important; border-bottom: 0;">
+<caption>(\#tab:eventObjects-Biomass-speciesFactorial)Where each object of (ref:Biomass-speciesFactorial) is written and read, in run order.</caption>
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Object </th>
+   <th style="text-align:left;"> Written by </th>
+   <th style="text-align:left;"> Read by </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr grouplength="1"><td colspan="3" style="border-bottom: 1px solid;"><strong>Inputs</strong></td></tr>
+<tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> argsForFactorial </td>
+   <td style="text-align:left;"> .inputObjects (default) </td>
+   <td style="text-align:left;"> init: Init() </td>
+  </tr>
+  <tr grouplength="1"><td colspan="3" style="border-bottom: 1px solid;"><strong>Outputs</strong></td></tr>
+<tr>
+   <td style="text-align:left;padding-left: 2em;" indentlevel="1"> factorialOutputs </td>
+   <td style="text-align:left;"> init: Init() </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+</tbody>
+<tfoot><tr><td style="padding: 0; " colspan="100%">
+<sup></sup> Not shown, touching no object in the metadata: init: RunExperiment(), init: ReadExperimentFiles(), plot, save. Not traced to any code (e.g. reached indirectly): cohortDataFactorial_path, speciesTableFactorial_path.</td></tr></tfoot>
+</table>
+
+
+#### .inputObjects {-}
+
+during simInit: defaults for inputs not supplied
+
+![](figures/Biomass_speciesFactorial_io_.inputObjects.png){width=100%}
+
+
+
+#### Init() {-}
+
+init event, step 1 of 3
+
+![](figures/Biomass_speciesFactorial_io_init_Init.png){width=100%}
 
 ### Plotting
 

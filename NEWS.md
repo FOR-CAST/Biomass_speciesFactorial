@@ -2,6 +2,8 @@ Known issues: <https://github.com/PredictiveEcology/Biomass_speciesFactorial/iss
 
 # Biomass_speciesFactorial (development version)
 
+* The README shows the module's events, the objects each reads and writes, and a figure per event, generated from the code (needs SpaDES.core 3.2.1.9068 or later; older versions leave them out).
+
 # Biomass_speciesFactorial 1.1.0
 
 This release changes how the module stores its large table of simulated growth curves. The results are saved once as files on disk instead of being held in memory, and projects that share a data folder reuse one copy instead of writing a new 1.5 GB copy for every run. The module now uses the current file format for saved objects, and the times at which results are recorded follow the simulation's start and end instead of a fixed range.
